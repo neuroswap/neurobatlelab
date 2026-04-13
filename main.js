@@ -1518,27 +1518,32 @@ const Game = {
     await this._delay(80);
     this._setupLighting();
 
-    UIManager.setLoadProgress(40, 'Building world...');
+    // ── Physics MUST init before _setupWorld (world.addBody calls inside) ──
+    UIManager.setLoadProgress(40, 'Initializing physics...');
     await this._delay(80);
-    this._setupWorld();
+    try { PhysicsManager.init(); }
+    catch(e) { console.error('[Game] PhysicsManager.init failed:', e); }
 
-    UIManager.setLoadProgress(60, 'Initializing physics...');
+    UIManager.setLoadProgress(55, 'Building world...');
     await this._delay(80);
-    PhysicsManager.init();
+    try { this._setupWorld(); }
+    catch(e) { console.error('[Game] _setupWorld failed:', e); }
 
-    UIManager.setLoadProgress(75, 'Loading systems...');
+    UIManager.setLoadProgress(72, 'Loading systems...');
     await this._delay(80);
-
-    BuildingSystem.init(this.scene);
-    CombatSystem.init();
-    Input.init();
+    try {
+      BuildingSystem.init(this.scene);
+      CombatSystem.init();
+      Input.init();
+    } catch(e) { console.error('[Game] Systems init failed:', e); }
 
     UIManager.setLoadProgress(90, 'Preparing UI...');
     await this._delay(80);
-
-    UIManager.init();
-    AdminSystem.init();
-    ReportSystem.init();
+    try {
+      UIManager.init();
+      AdminSystem.init();
+      ReportSystem.init();
+    } catch(e) { console.error('[Game] UI init failed:', e); }
 
     UIManager.setLoadProgress(100, 'Ready!');
     await this._delay(500);
@@ -1547,7 +1552,7 @@ const Game = {
     State.phase = 'menu';
     UIManager.showScreen('mainMenu');
 
-    // Start the render loop (even on menu — renders background)
+    // Start the render loop (runs even on menu for background render)
     this._loop();
   },
 
