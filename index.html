@@ -1,167 +1,18 @@
 <!DOCTYPE html>
-
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GunzML</title>
-
-  <!-- Fonts -->
-
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
-
-  <!-- Styles -->
-
-  <link rel="stylesheet" href="style.css" />
+  <title>GunzML Engine</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<!-- GAME CANVAS -->
-
 <canvas id="gameCanvas"></canvas>
 
-<!-- LOADING SCREEN -->
-
-<div id="loadingScreen" class="screen">
-  <div class="load-logo">GUNZML</div>
-  <div class="load-bar-wrap">
-    <div id="loadBar" class="load-bar"></div>
-  </div>
-  <div class="load-status" id="loadStatus">Initializing...</div>
+<div id="hud">
+  <div id="crosshair">+</div>
 </div>
 
-<!-- MAIN MENU -->
-
-<div id="mainMenu" class="screen hidden">
-  <div class="menu-bg-grid"></div>
-  <div class="menu-content">
-
-```
-<div class="menu-logo">
-  <span class="logo-gun">GUNZ</span><span class="logo-ml">ML</span>
-</div>
-
-<p class="menu-tagline">Build. Shoot. Dominate.</p>
-
-<div class="menu-name-row">
-  <label>CALLSIGN</label>
-  <input id="playerNameInput" type="text" maxlength="20" placeholder="Enter callsign..." />
-</div>
-
-<div class="menu-buttons">
-  <button id="btnPlay" class="btn-primary">▶ PLAY SOLO</button>
-  <button id="btnPractice" class="btn-primary btn-green">🎯 PRACTICE</button>
-  <button id="btnSkins" class="btn-secondary">👤 SKINS</button>
-  <button id="btnSettings" class="btn-secondary">⚙ SETTINGS</button>
-  <button id="btnControls" class="btn-secondary">⌨ CONTROLS</button>
-</div>
-
-<div class="menu-footer">v0.2.0 | GunzML</div>
-```
-
-  </div>
-</div>
-
-<!-- HUD -->
-
-<div id="hud" class="hidden">
-
-  <!-- Crosshair -->
-
-  <div id="crosshair">
-    <div class="ch-top"></div>
-    <div class="ch-bottom"></div>
-    <div class="ch-left"></div>
-    <div class="ch-right"></div>
-    <div class="ch-dot"></div>
-  </div>
-
-  <!-- Health -->
-
-  <div id="healthBar">
-    <span class="hud-label">HP</span>
-    <div class="bar-track">
-      <div id="healthFill" class="bar-fill health"></div>
-    </div>
-    <span id="healthVal">100</span>
-  </div>
-
-  <!-- Ammo -->
-
-  <div id="ammoDisplay">
-    <span id="ammoCount">30</span>/<span id="ammoReserve">90</span>
-    <div class="ammo-label">AMMO</div>
-  </div>
-
-  <!-- Score -->
-
-  <div id="scoreDisplay">
-    KILLS <span id="killCount">0</span>
-  </div>
-
-  <!-- Build HUD -->
-
-  <div id="buildHUD" class="hidden">
-    <div class="build-hud-bar">
-      <div class="bslot" data-type="wall">WALL (Q)</div>
-      <div class="bslot" data-type="floor">FLOOR (C)</div>
-      <div class="bslot" data-type="ramp">RAMP (V)</div>
-      <div class="bslot" data-type="stair">STAIR (Z)</div>
-    </div>
-    <div class="build-mode-tag">BUILD MODE</div>
-  </div>
-
-  <!-- Status -->
-
-  <div id="netStatus">OFFLINE</div>
-
-  <!-- Buttons -->
-
-<button id="btnReport" class="btn-report">REPORT</button>
-
-</div>
-
-<!-- DEATH SCREEN -->
-
-<div id="deathScreen" class="screen hidden">
-  <div class="panel">
-    <h2>ELIMINATED</h2>
-    <p id="deathMsg"></p>
-    <button id="btnRespawn" class="btn-primary">RESPAWN</button>
-    <button id="btnDeathQuit" class="btn-secondary">QUIT</button>
-  </div>
-</div>
-
-<!-- REPORT MODAL -->
-
-<div id="reportModal" class="modal-backdrop hidden">
-  <div class="modal">
-    <h3>REPORT PLAYER</h3>
-    <select id="reportTarget"></select>
-    <select id="reportReason">
-      <option>Cheating</option>
-      <option>Aimbot</option>
-      <option>Harassment</option>
-      <option>Glitching</option>
-      <option>Other</option>
-    </select>
-    <textarea id="reportDetails" placeholder="Details..."></textarea>
-    <button id="btnSubmitReport" class="btn-primary">SUBMIT</button>
-    <button id="btnCancelReport" class="btn-secondary">CANCEL</button>
-  </div>
-</div>
-
-<!-- SCRIPTS -->
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/cannon.js/0.6.2/cannon.min.js"></script>
-
-<script>
-  window.__socketStub = true;
-</script>
-
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
 <script src="main.js"></script>
 
 </body>
