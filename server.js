@@ -5,37 +5,16 @@ const wss = new WebSocket.Server({ port: 3000 });
 let players = {};
 
 wss.on("connection", (ws) => {
-    const id = Math.random().toString(36).substring(2);
-    
-    players[id] = {
-        x: 0,
-        y: 0,
-        z: 0
-    };
+  const id = Math.random().toString(36).substr(2);
 
-    ws.send(JSON.stringify({ type: "init", id, players }));
+  players[id] = { x: 0, y: 0, z: 0 };
 
-    ws.on("message", (msg) => {
-        const data = JSON.parse(msg);
+  ws.on("message", (msg) => {
+    const data = JSON.parse(msg);
+    players[id] = data;
+  });
 
-        if (data.type === "move") {
-            players[id] = data.position;
-
-            // broadcast updates
-            wss.clients.forEach(client => {
-                if (client.readyState === 1) {
-                    client.send(JSON.stringify({
-                        type: "update",
-                        players
-                    }));
-                }
-            });
-        }
-    });
-
-    ws.on("close", () => {
-        delete players[id];
-    });
+  setInterval(() => {
+    ws.send(JSON.stringify(players));
+  }, 50);
 });
-
-console.log("Server running on ws://localhost:3000");
