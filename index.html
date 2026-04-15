@@ -1,266 +1,168 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>GunzML</title>
+
+  <!-- Fonts -->
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+
+  <!-- Styles -->
+
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+
+<!-- GAME CANVAS -->
+
 <canvas id="gameCanvas"></canvas>
 
-<div id="loadingScreen">
+<!-- LOADING SCREEN -->
+
+<div id="loadingScreen" class="screen">
   <div class="load-logo">GUNZML</div>
-  <div class="load-bar-wrap"><div id="loadBar" class="load-bar"></div></div>
+  <div class="load-bar-wrap">
+    <div id="loadBar" class="load-bar"></div>
+  </div>
   <div class="load-status" id="loadStatus">Initializing...</div>
 </div>
+
+<!-- MAIN MENU -->
 
 <div id="mainMenu" class="screen hidden">
   <div class="menu-bg-grid"></div>
   <div class="menu-content">
-    <div class="menu-logo"><span class="logo-gun">GUNZ</span><span class="logo-ml">ML</span></div>
-    <p class="menu-tagline">Build. Shoot. Dominate.</p>
-    <div class="menu-name-row">
-      <label>CALLSIGN</label>
-      <input id="playerNameInput" type="text" maxlength="20" placeholder="Enter callsign..." spellcheck="false" />
-    </div>
-    <div class="menu-buttons">
-      <button class="btn-primary" id="btnPlay">&#9654; PLAY SOLO</button>
-      <button class="btn-primary btn-green" id="btnPractice">&#127919; PRACTICE RANGE</button>
-      <button class="btn-secondary" id="btnSkins">&#128100; SKINS</button>
-      <button class="btn-secondary" id="btnSettings">&#9881; SETTINGS</button>
-      <button class="btn-secondary" id="btnControls">&#9000; CONTROLS</button>
-    </div>
-    <div class="menu-footer">v0.2.0 | GunzML</div>
+
+```
+<div class="menu-logo">
+  <span class="logo-gun">GUNZ</span><span class="logo-ml">ML</span>
+</div>
+
+<p class="menu-tagline">Build. Shoot. Dominate.</p>
+
+<div class="menu-name-row">
+  <label>CALLSIGN</label>
+  <input id="playerNameInput" type="text" maxlength="20" placeholder="Enter callsign..." />
+</div>
+
+<div class="menu-buttons">
+  <button id="btnPlay" class="btn-primary">▶ PLAY SOLO</button>
+  <button id="btnPractice" class="btn-primary btn-green">🎯 PRACTICE</button>
+  <button id="btnSkins" class="btn-secondary">👤 SKINS</button>
+  <button id="btnSettings" class="btn-secondary">⚙ SETTINGS</button>
+  <button id="btnControls" class="btn-secondary">⌨ CONTROLS</button>
+</div>
+
+<div class="menu-footer">v0.2.0 | GunzML</div>
+```
+
   </div>
 </div>
 
-<div id="settingsScreen" class="screen hidden">
-  <div class="panel panel-wide">
-    <h2>SETTINGS</h2>
-    <div class="settings-section">MOUSE</div>
-    <div class="setting-row">
-      <label>Sensitivity <span id="sensVal" class="val-display">3.0</span></label>
-      <input id="sensSl" type="range" min="0.5" max="15" step="0.1" value="3.0" class="slider" />
-    </div>
-    <div class="setting-row">
-      <label>ADS Sensitivity <span id="adsVal" class="val-display">1.5</span></label>
-      <input id="adsSl" type="range" min="0.1" max="5" step="0.1" value="1.5" class="slider" />
-    </div>
-    <div class="setting-row">
-      <label>Invert Y Axis</label>
-      <label class="toggle"><input type="checkbox" id="invertY" /><span class="toggle-slider"></span></label>
-    </div>
-    <div class="settings-section">GRAPHICS</div>
-    <div class="setting-row">
-      <label>FOV <span id="fovVal" class="val-display">75</span></label>
-      <input id="fovSl" type="range" min="60" max="110" step="1" value="75" class="slider" />
-    </div>
-    <div class="setting-row">
-      <label>Shadows</label>
-      <label class="toggle"><input type="checkbox" id="shadows" checked /><span class="toggle-slider"></span></label>
-    </div>
-    <div class="settings-section">KEYBINDS <span style="font-size:.7rem;color:var(--text-dim)">(click to rebind)</span></div>
-    <div class="keybinds-grid" id="keybindsGrid"></div>
-    <div class="setting-actions">
-      <button class="btn-primary" id="btnSaveSettings">SAVE</button>
-      <button class="btn-secondary" id="btnResetSettings">RESET</button>
-      <button class="btn-secondary" id="btnBackSettings">BACK</button>
-    </div>
-  </div>
-</div>
-
-<div id="skinsScreen" class="screen hidden">
-  <div class="panel panel-wide">
-    <h2>SKINS</h2>
-    <p class="skin-subtitle">Choose your character style</p>
-    <div class="skins-layout">
-      <div id="skinsGrid" class="skins-grid"></div>
-      <div class="skin-preview-wrap">
-        <canvas id="skinPreviewCanvas" width="160" height="240"></canvas>
-        <div id="skinPreviewName" class="skin-preview-name">DEFAULT</div>
-      </div>
-    </div>
-    <div class="setting-actions">
-      <button class="btn-primary" id="btnEquipSkin">EQUIP</button>
-      <button class="btn-secondary" id="btnBackSkins">BACK</button>
-    </div>
-  </div>
-</div>
-
-<div id="controlsScreen" class="screen hidden">
-  <div class="panel">
-    <h2>CONTROLS</h2>
-    <div class="controls-grid">
-      <span>WASD</span><span>Move</span>
-      <span>SPACE</span><span>Jump</span>
-      <span>SHIFT</span><span>Sprint</span>
-      <span>L-CLICK</span><span>Shoot / Place</span>
-      <span>R-CLICK</span><span>Aim</span>
-      <span>B</span><span>Toggle Build</span>
-      <span>Q</span><span>Wall</span>
-      <span>C</span><span>Floor</span>
-      <span>V</span><span>Ramp</span>
-      <span>Z</span><span>Stair</span>
-      <span>R</span><span>Reload</span>
-      <span>TAB</span><span>Players</span>
-      <span>ESC</span><span>Pause</span>
-      <span>SHIFT+`</span><span>Admin</span>
-    </div>
-    <button class="btn-secondary" id="btnBackControls">BACK</button>
-  </div>
-</div>
-
-<div id="pauseMenu" class="screen hidden">
-  <div class="panel">
-    <h2>PAUSED</h2>
-    <button class="btn-primary" id="btnResume">RESUME</button>
-    <button class="btn-secondary" id="btnPauseSettings">SETTINGS</button>
-    <button class="btn-secondary" id="btnQuit">QUIT TO MENU</button>
-  </div>
-</div>
+<!-- HUD -->
 
 <div id="hud" class="hidden">
+
+  <!-- Crosshair -->
+
   <div id="crosshair">
-    <div class="ch-top"></div><div class="ch-bottom"></div>
-    <div class="ch-left"></div><div class="ch-right"></div>
+    <div class="ch-top"></div>
+    <div class="ch-bottom"></div>
+    <div class="ch-left"></div>
+    <div class="ch-right"></div>
     <div class="ch-dot"></div>
   </div>
-  <div id="hitMarker" class="hidden">+</div>
+
+  <!-- Health -->
+
   <div id="healthBar">
-    <div class="hud-label">HP</div>
-    <div class="bar-track"><div id="healthFill" class="bar-fill health"></div></div>
-    <div id="healthVal" class="hud-val">100</div>
+    <span class="hud-label">HP</span>
+    <div class="bar-track">
+      <div id="healthFill" class="bar-fill health"></div>
+    </div>
+    <span id="healthVal">100</span>
   </div>
+
+  <!-- Ammo -->
+
   <div id="ammoDisplay">
-    <span id="ammoCount">30</span><span class="ammo-sep">/</span><span id="ammoReserve">90</span>
+    <span id="ammoCount">30</span>/<span id="ammoReserve">90</span>
     <div class="ammo-label">AMMO</div>
   </div>
-  <div id="killFeed"></div>
+
+  <!-- Score -->
+
   <div id="scoreDisplay">
-    <div class="score-item">KILLS <span id="killCount">0</span></div>
+    KILLS <span id="killCount">0</span>
   </div>
+
+  <!-- Build HUD -->
+
   <div id="buildHUD" class="hidden">
     <div class="build-hud-bar">
-      <div class="bslot" id="bslot-wall" data-type="wall"><div class="bslot-icon">&#9644;</div><div class="bslot-label">WALL</div><div class="bslot-key">Q</div></div>
-      <div class="bslot" id="bslot-floor" data-type="floor"><div class="bslot-icon">&#11035;</div><div class="bslot-label">FLOOR</div><div class="bslot-key">C</div></div>
-      <div class="bslot" id="bslot-ramp" data-type="ramp"><div class="bslot-icon">&#9720;</div><div class="bslot-label">RAMP</div><div class="bslot-key">V</div></div>
-      <div class="bslot" id="bslot-stair" data-type="stair"><div class="bslot-icon">&#9636;</div><div class="bslot-label">STAIR</div><div class="bslot-key">Z</div></div>
+      <div class="bslot" data-type="wall">WALL (Q)</div>
+      <div class="bslot" data-type="floor">FLOOR (C)</div>
+      <div class="bslot" data-type="ramp">RAMP (V)</div>
+      <div class="bslot" data-type="stair">STAIR (Z)</div>
     </div>
     <div class="build-mode-tag">BUILD MODE</div>
   </div>
-  <div id="reloadBar" class="hidden">
-    <div class="reload-text">RELOADING</div>
-    <div class="bar-track"><div id="reloadFill" class="bar-fill reload"></div></div>
-  </div>
-  <div id="netStatus" class="net-offline">OFFLINE</div>
-  <div id="playerList" class="hidden">
-    <div class="pl-title">PLAYERS</div><ul id="plList"></ul>
-  </div>
-  <div id="practiceHUD" class="hidden">
-    <div class="prac-stat">HITS <span id="pracHits">0</span></div>
-    <div class="prac-stat">ACCURACY <span id="pracAcc">0%</span></div>
-    <div class="prac-stat">SHOTS <span id="pracShots">0</span></div>
-    <div class="prac-timer">TIME <span id="pracTimer">0s</span></div>
-    <button class="btn-secondary btn-sm" id="btnExitPractice" style="pointer-events:all;margin-top:8px">EXIT RANGE</button>
-  </div>
-  <button id="btnReport" class="btn-report">REPORT</button>
+
+  <!-- Status -->
+
+  <div id="netStatus">OFFLINE</div>
+
+  <!-- Buttons -->
+
+<button id="btnReport" class="btn-report">REPORT</button>
+
 </div>
 
+<!-- DEATH SCREEN -->
+
 <div id="deathScreen" class="screen hidden">
-  <div class="panel panel-death">
-    <h2 class="death-title">ELIMINATED</h2>
-    <p id="deathMsg" class="death-msg"></p>
-    <div class="death-stats">
-      <div class="ds-item">KILLS <span id="deathKills">0</span></div>
-      <div class="ds-item">SHOTS <span id="deathShots">0</span></div>
-      <div class="ds-item">ACC <span id="deathAcc">0%</span></div>
-    </div>
-    <button class="btn-primary" id="btnRespawn">RESPAWN</button>
-    <button class="btn-secondary" id="btnDeathQuit">QUIT</button>
+  <div class="panel">
+    <h2>ELIMINATED</h2>
+    <p id="deathMsg"></p>
+    <button id="btnRespawn" class="btn-primary">RESPAWN</button>
+    <button id="btnDeathQuit" class="btn-secondary">QUIT</button>
   </div>
 </div>
+
+<!-- REPORT MODAL -->
 
 <div id="reportModal" class="modal-backdrop hidden">
   <div class="modal">
     <h3>REPORT PLAYER</h3>
-    <label>Player</label>
-    <select id="reportTarget"><option value="">-- Select --</option></select>
-    <label>Reason</label>
+    <select id="reportTarget"></select>
     <select id="reportReason">
-      <option value="cheating">Cheating</option>
-      <option value="aimbot">Aimbot</option>
-      <option value="harassment">Harassment</option>
-      <option value="glitching">Glitching</option>
-      <option value="other">Other</option>
+      <option>Cheating</option>
+      <option>Aimbot</option>
+      <option>Harassment</option>
+      <option>Glitching</option>
+      <option>Other</option>
     </select>
-    <label>Details</label>
-    <textarea id="reportDetails" rows="3" placeholder="What did you see?"></textarea>
-    <div class="modal-actions">
-      <button class="btn-primary" id="btnSubmitReport">SUBMIT</button>
-      <button class="btn-secondary" id="btnCancelReport">CANCEL</button>
-    </div>
+    <textarea id="reportDetails" placeholder="Details..."></textarea>
+    <button id="btnSubmitReport" class="btn-primary">SUBMIT</button>
+    <button id="btnCancelReport" class="btn-secondary">CANCEL</button>
   </div>
 </div>
 
-<div id="adminConsole" class="hidden">
-  <div id="adminLock" class="admin-section">
-    <div class="admin-title">ADMIN CONSOLE <span class="admin-sub">// GunzML MCD</span></div>
-    <div class="admin-auth-row">
-      <input id="adminPassInput" type="password" placeholder="Master password..." autocomplete="off" />
-      <button id="btnAdminAuth" class="btn-primary btn-sm">UNLOCK</button>
-    </div>
-    <div id="adminAuthMsg" class="admin-msg"></div>
-  </div>
-  <div id="adminPanel" class="admin-section hidden">
-    <div class="admin-title">ADMIN PANEL <span class="admin-sub">// Authenticated</span></div>
-    <div class="admin-tabs">
-      <button class="admin-tab active" data-tab="players">Players</button>
-      <button class="admin-tab" data-tab="bans">Bans</button>
-      <button class="admin-tab" data-tab="reports">Reports</button>
-      <button class="admin-tab" data-tab="config">Config</button>
-    </div>
-    <div id="adminTab-players" class="admin-tab-content"><div id="adminPlayerList" class="admin-list"></div></div>
-    <div id="adminTab-bans" class="admin-tab-content hidden">
-      <div id="adminBanList" class="admin-list"></div>
-      <div class="admin-input-row">
-        <input id="banIdInput" type="text" placeholder="Player ID..." />
-        <input id="banReasonInput" type="text" placeholder="Reason..." />
-        <button class="btn-primary btn-sm" id="btnAddBan">BAN</button>
-      </div>
-    </div>
-    <div id="adminTab-reports" class="admin-tab-content hidden">
-      <div id="adminReportList" class="admin-list"></div>
-      <button class="btn-secondary btn-sm" id="btnClearReports">CLEAR ALL</button>
-    </div>
-    <div id="adminTab-config" class="admin-tab-content hidden">
-      <div class="config-row"><label>Server URL</label><input id="cfgServer" type="text" placeholder="ws://localhost:3000" /></div>
-      <div class="config-row"><label>Discord Webhook</label><input id="cfgWebhook" type="text" placeholder="https://discord.com/api/webhooks/..." /></div>
-      <div class="config-row"><label>New Password</label><input id="cfgNewPass" type="password" placeholder="New admin password..." /></div>
-      <button class="btn-primary btn-sm" id="btnSaveConfig">SAVE</button>
-      <div id="cfgMsg" class="admin-msg"></div>
-    </div>
-    <button class="btn-secondary btn-sm" id="btnAdminLock" style="margin-top:12px">LOCK</button>
-  </div>
-  <button class="admin-close" id="btnAdminClose">X</button>
-</div>
-
-<div id="rebindModal" class="modal-backdrop hidden">
-  <div class="modal" style="text-align:center">
-    <h3>REBIND KEY</h3>
-    <p id="rebindAction" style="color:var(--accent);margin:10px 0;letter-spacing:.1em;font-size:1.1rem"></p>
-    <p style="color:var(--text-dim);font-size:.82rem">Press any key to assign...</p>
-    <button class="btn-secondary" id="btnCancelRebind" style="margin-top:14px">CANCEL</button>
-  </div>
-</div>
-
-<div id="toastContainer"></div>
+<!-- SCRIPTS -->
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cannon.js/0.6.2/cannon.min.js"></script>
-<script>window.__socketStub = true;</script>
+
+<script>
+  window.__socketStub = true;
+</script>
+
 <script src="main.js"></script>
+
 </body>
 </html>
